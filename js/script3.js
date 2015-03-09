@@ -1,3 +1,6 @@
+//data
+//https://www.hurl.it/?method=GET&url=https%3A%2F%2Fopendata.socrata.com%2Fresource%2F72wm-ide8.json
+//&headers=%7B%22X-App-Token%22%3A%5B%22bjp8KrRvAPtuf809u1UXnI0Z8%22%5D%7D&args=%7B%7D#top
 
 var map = L.map('map').setView([40.65,-73.93], 12);
 
@@ -7,26 +10,6 @@ var CartoDBTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{
 
 map.addLayer(CartoDBTiles);
 
-function createListForClick(dataset) {
-    var ULs = d3.select("#list")
-                .append("ul");
-
-    // now that we have a selection and something appended to the selection, let's create all of the list elements (li) with the dataset we have 
-    ULs.selectAll("li")
-        .data(value.project_title)
-        .enter()
-        .append("li")
-        .html(function(d) { 
-            return '<a href="#">' + value.project_title + '</a>';
-        })
-        .on('click', function(d, i) {
-            console.log(d);
-            var leafletId = 'value.zip' + i;
-            console.log(leafletId);
-            map._layers[leafletId].fire('click');
-        })  
-
-}
 
 $.getJSON( "https://opendata.socrata.com/resource/72wm-ide8.json?agency_code=Parks&City=Brooklyn", function( data ) {
     var dataset = data;
@@ -67,10 +50,29 @@ function setUpD3Scale(dataset) {
 	var linearScale = d3.scale.linear()
 	.domain([d3.min(dataset, function(d) { return d._09_10funding; }), d3.max(dataset, function(d) { return d._09_10funding; })])
 	.range(["#e0ecf4","#8856a7"]);
+    //color scale mfrom colorbrewer2.org
     return linearScale;
 }
 
+//function createListForClick(dataset) {
+    var ULs = d3.select("#list")
+                .append("ul");
 
+    ULs.selectAll("li")
+        .data()
+        .enter()
+        .append("li")
+        //.html(function(d) { 
+        //    return value.project_title;
+        //})
+        .on('click', function(d, i) {
+            console.log(d);
+            var leafletId = 'value.zip' + i;
+            console.log(leafletId);
+            map._layers[leafletId].fire('click');
+        })  
+
+//}
 
 
 
